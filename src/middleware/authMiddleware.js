@@ -1,13 +1,7 @@
-import { Response, NextFunction } from 'express';
-import { verifyToken } from '../utils/jwtHelper';
-import { sendError } from '../utils/apiResponse';
-import { AuthRequest } from '../types';
+const { verifyToken }              = require('../utils/jwtHelper');
+const { sendError }                = require('../utils/apiResponse');
 
-export const protect = (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): void => {
+const protect = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -31,14 +25,12 @@ export const protect = (
   }
 };
 
-export const superAdminOnly = (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): void => {
+const superAdminOnly = (req, res, next) => {
   if (req.admin?.role !== 'superadmin') {
     sendError(res, 'Access denied. Super admin only.', 403);
     return;
   }
   next();
 };
+
+module.exports = { protect, superAdminOnly };

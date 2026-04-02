@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import { ENV } from './env';
+const mongoose = require('mongoose');
+const { ENV }  = require('./env');
 
-const connectDB = async (): Promise<void> => {
+const connectDB = async () => {
   try {
     const conn = await mongoose.connect(ENV.MONGODB_URI);
     console.log(`✅ MongoDB connected: ${conn.connection.host}`);
@@ -11,4 +11,4 @@ const connectDB = async (): Promise<void> => {
   }
 };
 
-export default connectDB;
+module.exports = connectDB;

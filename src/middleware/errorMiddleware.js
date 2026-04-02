@@ -1,22 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
-import { sendError } from '../utils/apiResponse';
+const { sendError } = require('../utils/apiResponse');
 
-export const notFound = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+const notFound = (req, res, next) => {
   const error = new Error(`Route not found: ${req.originalUrl}`);
   res.status(404);
   next(error);
 };
 
-export const globalErrorHandler = (
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+const globalErrorHandler = (err, req, res, next) => {
   let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   let message    = err.message || 'Internal server error';
 
@@ -29,11 +19,11 @@ export const globalErrorHandler = (
 
   // Mongoose validation error
   if (err.name === 'ValidationError') {
-    message    = Object.values(err.errors).map((e: any) => e.message).join(', ');
+    message    = Object.values(err.errors).map(e => e.message).join(', ');
     statusCode = 400;
   }
 
-  // Mongoose cast error (invalid ObjectId)
+  // Mongoose cast error
   if (err.name === 'CastError') {
     message    = `Invalid ${err.path}: ${err.value}`;
     statusCode = 400;
@@ -41,3 +31,5 @@ export const globalErrorHandler = (
 
   sendError(res, message, statusCode);
 };
+
+module.exports = { notFound, globalErrorHandler };

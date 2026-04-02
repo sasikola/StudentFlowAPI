@@ -1,19 +1,20 @@
-import dotenv from "dotenv";
-dotenv.config();
+require("dotenv").config();
 
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import morgan from "morgan";
-import connectDB from "./config/db";
-import { ENV } from "./config/env";
-import { notFound, globalErrorHandler } from "./middleware/errorMiddleware";
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const connectDB = require("./config/db");
+const { ENV } = require("./config/env");
+const {
+  notFound,
+  globalErrorHandler,
+} = require("./middleware/errorMiddleware");
 
-// Routes
-import authRoutes from "./routes/authRoutes";
-import studentRoutes from "./routes/studentRoutes";
-import serviceRoutes from "./routes/serviceRoutes";
-import paymentRoutes from "./routes/paymentRoutes";
+const authRoutes = require("./routes/authRoutes");
+const studentRoutes = require("./routes/studentRoutes");
+const serviceRoutes = require("./routes/serviceRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 
 // Connect DB
 connectDB();
@@ -23,7 +24,7 @@ const app = express();
 // ── Middleware ──
 app.use(helmet());
 app.use(cors());
-app.use(morgan(ENV.NODE_ENV === "development" ? "dev" : "combined"));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -43,15 +44,16 @@ app.use("/api/students", studentRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/payments", paymentRoutes);
 
+
 // ── Error handlers ──
 app.use(notFound);
 app.use(globalErrorHandler);
 
 // ── Start server ──
 app.listen(ENV.PORT, () => {
-  console.log(`🚀 StudentFlow API running on port ${ENV.PORT}`);
+  console.log(`\n🚀 StudentFlow API running on port ${ENV.PORT}`);
   console.log(`📡 Environment: ${ENV.NODE_ENV}`);
-  console.log(`🏥 Health check: http://localhost:${ENV.PORT}/health`);
+  console.log(`🏥 Health: http://localhost:${ENV.PORT}/health`);
 });
 
-export default app;
+module.exports = app;

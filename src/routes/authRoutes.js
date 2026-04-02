@@ -1,13 +1,12 @@
-import { Router } from 'express';
-import { login, register, getProfile, logout } from '../controllers/authController';
-import { protect } from '../middleware/authMiddleware';
-import { body } from 'express-validator';
-import { validate } from '../middleware/validateMiddleware';
+const express        = require('express');
+const { body }       = require('express-validator');
+const { login, register, getProfile, logout } = require('../controllers/authController');
+const { protect }    = require('../middleware/authMiddleware');
+const { validate }   = require('../middleware/validateMiddleware');
 
-const router = Router();
+const router = express.Router();
 
-router.post(
-  '/register',
+router.post('/register',
   [
     body('name').notEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Valid email required'),
@@ -17,8 +16,7 @@ router.post(
   register
 );
 
-router.post(
-  '/login',
+router.post('/login',
   [
     body('email').isEmail().withMessage('Valid email required'),
     body('password').notEmpty().withMessage('Password is required'),
@@ -30,4 +28,4 @@ router.post(
 router.get('/profile', protect, getProfile);
 router.post('/logout',  protect, logout);
 
-export default router;
+module.exports = router;

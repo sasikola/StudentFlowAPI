@@ -14,6 +14,6 @@ router.use(protect);
 router.get("/", getAllPayments);
 router.get("/summary", getPaymentSummary);
 router.post("/", createPayment);
-router.put("/:id", updatePayment);
+router.put("/:studentId/payments/:paymentId", updatePayment);
 
 module.exports = router;

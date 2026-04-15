@@ -68,10 +68,17 @@ const createPayment = async (req, res) => {
 const updatePayment = async (req, res) => {
   try {
     const { paidAmount, mode, dueDate, note } = req.body;
+    const { studentId, paymentId } = req.params;
 
-    const payment = await Payment.findById(req.params.id);
+    const payment = await Payment.findById(paymentId);
     if (!payment) {
       sendError(res, "Payment not found", 404);
+      return;
+    }
+
+    // Verify payment belongs to this student
+    if (payment.studentId.toString() !== studentId) {
+      sendError(res, "Payment does not belong to this student", 403);
       return;
     }
 

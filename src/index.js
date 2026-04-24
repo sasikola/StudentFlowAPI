@@ -15,6 +15,7 @@ const authRoutes = require("./routes/authRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
+const foodRoutes = require("./routes/foodRoutes");
 
 // Connect DB
 connectDB();
@@ -43,6 +44,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api", foodRoutes);
 
 
 // ── Error handlers ──
